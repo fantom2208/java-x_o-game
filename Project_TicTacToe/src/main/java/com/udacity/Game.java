@@ -139,6 +139,97 @@ public class Game {
         return;
     }
 
+    /** String checkGridLines(...) checks if exist chain of 'X' or 'O'
+     *  with length >= winChainLength on rows/columns OR if all cell are occupied
+     *  OR "None" in other situations
+     *  (as soon as one of the condition is met - stops all loops)
+     * 
+     *  @param winChainLength - minimum lenght of chain 'X' or 'O'  (current = 3)
+     *  @param fieldSize - dimension of play field (current = 3)
+     *  @param ifRowsCheck - true-check rows, false-check columns
+     *  @param grid - 2D array of characters representing the game board
+     */
+    public String checkGridLines(int winChainLength, int fieldSize, 
+                                 boolean ifRowsCheck, char [][]grid) {
+        String result = "None";
+        // current numbers of elements
+        int xCount, oCount, emptyCount = 0;
+        // previous and current cells values (to match if chain continue)
+        char previousValue, currentVlue;
+        // indexes
+        int i, j;
+
+        //algorithm based on rows check when ifRowsCheck == true
+        // loop for rows/columns
+        for (j = 0; j < fieldSize; j++ ) {
+            // reset elements counts
+            xCount = 0;
+            oCount = 0;
+
+            // select first element in row/column
+            if ( ifRowsCheck ) 
+                previousValue = grid[0][j];
+            else
+                previousValue = grid[j][0];
+            
+            // count element value
+            switch (previousValue) {
+                case 'x': xCount++; break;
+                case 'o': oCount++; break;
+                default: emptyCount++;
+            }            
+
+            // loop for columns/rows
+            for (i = 1; i < fieldSize; i++) {
+                // current value in row/column
+                if ( ifRowsCheck ) 
+                    currentVlue = grid[i][j];
+                else
+                    currentVlue = grid[j][i];
+                
+                //if currentVlue is differ from previousValue - reset counts
+                if ( currentVlue != previousValue) {
+                    xCount = 0;
+                    oCount = 0;
+                    previousValue = currentVlue;
+                }
+                // count element value
+                switch (previousValue) {
+                    case 'x': xCount++; break;
+                    case 'o': oCount++; break;
+                    default: emptyCount++;
+                }
+
+                // if 'X' count reach minimum level - stop & message
+                if ( xCount >= winChainLength) {
+                    result = "'X' wins, congratulation!";
+                    break;
+                }
+                // if 'O' count reach minimum level - stop & message
+                if ( oCount >= winChainLength) {
+                    result = "'O' wins, congratulation!";
+                    break;
+                }
+            }
+            // any wins - stop main loop
+            if (result != "None") {
+                // only for debuging - then delete
+                if ( ifRowsCheck ) 
+                    System.out.println(result + ": lines check, endpoint [" + i + ";" + j + "]");
+                else
+                    System.out.println(result + ": columns check, endpoint [" + i + ";" + j + "]");
+                
+                // keep break loop
+                break;
+            }            
+        } 
+        // if no empty cells and no wins - then Tie
+        if ( result == "None" && emptyCount == 0 ) 
+            result = "Tie! All cells occupied...";
+        
+        // return message
+        return result;
+    }
 
     /**
      * Checks if the game has ended either because a player has won, or if the game has ended as a tie.
@@ -150,7 +241,12 @@ public class Game {
      */
     public String checkGameWinner(char [][]grid){
         String result = "None";
-        //Student code goes here ...
+
+        result = checkGridLines (3,3, true, grid);
+
+        if (result == "None")
+            result = checkGridLines (3, 3, false, grid);
+
         return result;
     }
 

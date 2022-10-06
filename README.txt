@@ -12,10 +12,8 @@ running (all times):
         tbd
 
 features:
-        0) field size fixed by default 3x3
-        1) algorithm to define winnwers checks only for rows or columns
-        (daigonals to be added later)
-        2) algorithm to define winnwers developed in common way for field size
+        0) field size now fixed by default 3x3 (lots of places with value 3)
+        1) algorithm to define winnwers developed in common way for field size
 
 known issues:
         0) in case of gradle issue
@@ -23,11 +21,8 @@ known issues:
         open
             gradle/wrapper/gradle-wrapper.properties
         and set a proper distributionUrl there:
-            distributionUrl=https\://services.gradle.org/distributions/gradle-4.8.1-all.zip
+            distributionUrl=https://services.gradle.org/distributions/gradle-6.1-all.zip
 
-        1) no algorithm to check if game finished ("x" or "o" win or 'tie') for diagonals
-           solution: define new function with loops
-           when: next step
         2) windows shape is not scallable and not fit to small screens
            solution: define how to change dimension of window
            when: tbd

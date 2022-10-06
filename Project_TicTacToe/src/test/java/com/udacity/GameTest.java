@@ -109,7 +109,7 @@ public class GameTest {
         // Note that horizontal here is vertical in UI and vise versa
         char[][] grid2 = {  {'x', 'x', 'o'},
                             {'o', 'o', 'o'},
-                            {'x', 'o', 'x'}};
+                            {'x', '-', 'x'}};
         assertTrue("o vertical win fail", game.checkGameWinner(grid2).equalsIgnoreCase("o wins"));
     }
     @Test
@@ -188,7 +188,7 @@ public class GameTest {
     @Test
     public void no_winner_case1() {
         // Note that horizontal here is vertical in UI and vise versa
-        char[][] grid2 = {  {'o', 'x', '-'},
+        char[][] grid2 = {  {'o', '-', 'o'},
                             {'o', 'x', 'x'},
                             {'x', 'o', 'x'}};
         assertTrue("game no supposed to end", game.checkGameWinner(grid2).equalsIgnoreCase("none"));

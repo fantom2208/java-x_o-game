@@ -1,5 +1,6 @@
 package com.udacity;
 
+import java.security.KeyStore.TrustedCertificateEntry;
 import java.util.Arrays;
 
 /**
@@ -202,22 +203,24 @@ public class Game {
 
                 // if 'X' count reach minimum level - stop & message
                 if ( xCount >= winChainLength) {
-                    result = "'X' wins, congratulation!";
+                    //result = "'X' wins, congratulation!";
+                    result = "X wins";
                     break;
                 }
                 // if 'O' count reach minimum level - stop & message
                 if ( oCount >= winChainLength) {
-                    result = "'O' wins, congratulation!";
+                    //result = "'O' wins, congratulation!";
+                    result = "O wins";
                     break;
                 }
             }
             // any wins - stop main loop
             if (result != "None") {
                 // only for debuging - then delete
-                if ( ifRowsCheck ) 
-                    System.out.println(result + ": lines check, endpoint [" + i + ";" + j + "]");
-                else
-                    System.out.println(result + ": columns check, endpoint [" + i + ";" + j + "]");
+                //if ( ifRowsCheck ) 
+                //    System.out.println(result + ": lines check, endpoint [" + i + ";" + j + "]");
+                //else
+                //    System.out.println(result + ": columns check, endpoint [" + i + ";" + j + "]");
                 
                 // keep break loop
                 break;
@@ -225,7 +228,179 @@ public class Game {
         } 
         // if no empty cells and no wins - then Tie
         if ( result == "None" && emptyCount == 0 ) 
-            result = "Tie! All cells occupied...";
+            //result = "Tie! All cells occupied...";
+            result = "Tie";
+        
+        // return message
+        return result;
+    }
+
+
+    /** String checkGridLines(...) checks if exist chain of 'X' or 'O'
+     *  with length >= winChainLength on rows/columns OR if all cell are occupied
+     *  OR "None" in other situations
+     *  (as soon as one of the condition is met - stops all loops)
+     * 
+     *  @param winChainLength - minimum lenght of chain 'X' or 'O'  (current = 3)
+     *  @param fieldSize - dimension of play field (current = 3)
+     *  @param ifRightDown - true-check diag to right-down, false-check diag to right-up
+     *  @param grid - 2D array of characters representing the game board
+     */
+    public String checkGridDiagonals(int winChainLength, int fieldSize, 
+                                 boolean ifRightDown, char [][]grid) {
+        String result = "None";
+        // current numbers of elements
+        int xCount, oCount, emptyCount = 0;
+        // previous and current cells values (to match if chain continue)
+        char previousValue, currentVlue;
+        // indexes
+        int i, j, k;
+
+        //algorithm based on diagonal check when ifRightDown == true
+        // loop for right-down/right-up till 'main diagonal'
+        for (i = 0; i < fieldSize; i++) {
+            // reset elements counts
+            xCount = 0;
+            oCount = 0;
+
+            // select first element in first row/column
+            if ( ifRightDown ) 
+                previousValue = grid[i][0];
+            else
+                previousValue = grid[0][fieldSize - i -1];
+            
+            // count element value
+            switch (previousValue) {
+                case 'x': xCount++; break;
+                case 'o': oCount++; break;
+                default: emptyCount++;
+            }            
+
+            // loop for column (k) and row (j) increase 
+            j = 1;
+            for (k = i + 1; k < fieldSize; k++) {
+                // current value in row/column
+                if ( ifRightDown ) 
+                    currentVlue = grid[k][j];
+                else
+                    currentVlue = grid[j][fieldSize - k -1];
+                j++;
+                
+                //if currentVlue is differ from previousValue - reset counts
+                if ( currentVlue != previousValue) {
+                    xCount = 0;
+                    oCount = 0;
+                    previousValue = currentVlue;
+                }
+                // count element value
+                switch (previousValue) {
+                    case 'x': xCount++; break;
+                    case 'o': oCount++; break;
+                    default: emptyCount++;
+                }
+
+                // if 'X' count reach minimum level - stop & message
+                if ( xCount >= winChainLength) {
+                    //result = "'X' wins, congratulation!";
+                    result = "X wins";
+                    break;
+                }
+                // if 'O' count reach minimum level - stop & message
+                if ( oCount >= winChainLength) {
+                    //result = "'O' wins, congratulation!";
+                    result = "O wins";
+                    break;
+                }
+            }
+            // any wins - stop main loop
+            if (result != "None") {
+                // only for debuging - then delete
+                //if ( ifRowsCheck ) 
+                //    System.out.println(result + ": lines check, endpoint [" + i + ";" + j + "]");
+                //else
+                //    System.out.println(result + ": columns check, endpoint [" + i + ";" + j + "]");
+                
+                // keep break loop
+                break;
+            }           
+        } 
+
+        // if no winners - continue under 'main' diagoanl
+        if (result == "None") {
+            // loop for right-down/right-up under 'main diagonal'
+            for (j = 1; j < fieldSize; j++ ) {
+                // reset elements counts
+                xCount = 0;
+                oCount = 0;
+
+                // select first element in first column/row
+                if ( ifRightDown ) 
+                    previousValue = grid[0][j];
+                else
+                    previousValue = grid[fieldSize - j - 1][0];
+                
+                // count element value
+                switch (previousValue) {
+                    case 'x': xCount++; break;
+                    case 'o': oCount++; break;
+                    default: emptyCount++;
+                }            
+
+                // loop for column (i) and row (k) increase 
+                i = 1;
+                for (k = j + 1; k < fieldSize; k++) {
+                    // current value in row/column
+                    if ( ifRightDown ) 
+                        currentVlue = grid[i][k];
+                    else
+                        currentVlue = grid[k][fieldSize - i -1];
+                    i++;
+                    
+                    //if currentVlue is differ from previousValue - reset counts
+                    if ( currentVlue != previousValue) {
+                        xCount = 0;
+                        oCount = 0;
+                        previousValue = currentVlue;
+                    }
+                    // count element value
+                    switch (previousValue) {
+                        case 'x': xCount++; break;
+                        case 'o': oCount++; break;
+                        default: emptyCount++;
+                    }
+
+                    // if 'X' count reach minimum level - stop & message
+                    if ( xCount >= winChainLength) {
+                        //result = "'X' wins, congratulation!";
+                        result = "X wins";
+                        break;
+                    }
+                    // if 'O' count reach minimum level - stop & message
+                    if ( oCount >= winChainLength) {
+                        //result = "'O' wins, congratulation!";
+                        result = "O wins";
+                        break;
+                    }
+                }
+                // any wins - stop main loop
+                if (result != "None") {
+                    // only for debuging - then delete
+                    //if ( ifRowsCheck ) 
+                    //    System.out.println(result + ": lines check, endpoint [" + i + ";" + j + "]");
+                    //else
+                    //    System.out.println(result + ": columns check, endpoint [" + i + ";" + j + "]");
+                    
+                    // keep break loop
+                    break;
+                }           
+            } 
+        }
+
+
+        // if no empty cells and no wins - then Tie
+        if ( result == "None" && emptyCount == 0 ) 
+            //result = "Tie! All cells occupied...";
+            result = "Tie";
         
         // return message
         return result;
@@ -246,6 +421,12 @@ public class Game {
 
         if (result == "None")
             result = checkGridLines (3, 3, false, grid);
+
+        if (result == "None")
+            result = checkGridDiagonals (3, 3, true, grid);
+        
+        if (result == "None")
+            result = checkGridDiagonals (3, 3, false, grid);
 
         return result;
     }

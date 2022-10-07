@@ -23,9 +23,6 @@ known issues:
         and set a proper distributionUrl there:
             distributionUrl=https://services.gradle.org/distributions/gradle-6.1-all.zip
 
-        2) windows shape is not scallable and not fit to small screens
-           solution: define how to change dimension of window
-           when: tbd
         3) for 2 players function checkGameWinner() calls twice for 1 change
            for 1 player onece for 1 change. Not critical, but need to find reason
 

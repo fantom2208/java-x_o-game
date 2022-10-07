@@ -36,9 +36,9 @@ public class GameUI extends JPanel {
         // load images from resources files
         try {
             ClassLoader classLoader = GameUI.class.getClassLoader();
-            grid = ImageIO.read(classLoader.getResourceAsStream("grid.png"));
-            x = ImageIO.read(classLoader.getResourceAsStream("x.png"));
-            o = ImageIO.read(classLoader.getResourceAsStream("o.png"));
+            grid = ImageIO.read(classLoader.getResourceAsStream("grid_small.png"));
+            x = ImageIO.read(classLoader.getResourceAsStream("x_small.png"));
+            o = ImageIO.read(classLoader.getResourceAsStream("o_small.png"));
         } catch (IOException ex) {
             System.out.println("Failed to load images");
         }
@@ -89,8 +89,8 @@ public class GameUI extends JPanel {
         this.add(new2PlayerGameButton);
 
         //set panel dimensions
-        final int WIDTH = 620;
-        final int HEIGHT = 650;
+        final int WIDTH = 465; //620;
+        final int HEIGHT = 488; //650;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
         //create the frame that would include this panel and siplay it
@@ -117,11 +117,13 @@ public class GameUI extends JPanel {
             for(int j=2; j>=0;j--) {
                 if(game.gridAt(i,j)=='x'){
                     //based on grid index, calculate the pixel location to draw the x image
-                    g.drawImage(x, 200*i+40,200*j+70, null); // draw an x
+                    // g.drawImage(x, 200*i+40,200*j+70, null); // draw an x
+                    g.drawImage(x, 150*i+30,150*j+60, null); // draw an x
                 }
                 else if(game.gridAt(i,j)=='o'){
                     //based on grid index, calculate the pixel location to draw the o image
-                    g.drawImage(o, 200*i+40,200*j+70, null); // draw an o
+                    // g.drawImage(o, 200*i+40,200*j+70, null); // draw an o
+                    g.drawImage(o, 150*i+30,150*j+60, null); // draw an o
                 }
             }
         }
